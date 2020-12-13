@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Military</title>
+  <meta content="" name="descriptison">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Anyar - v2.1.0
+  * Template URL: https://bootstrapmade.com/anyar-free-multipurpose-one-page-bootstrap-theme/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+
+    <!-- Google API -->
+
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+      google.charts.load('current', {'packages': ['corechart', 'geochart', 'controls']});
+      google.charts.setOnLoadCallback(drawAllSheets);
+      google.charts.setOnLoadCallback(drawDashboard);
+
+      function drawAllSheets() {
+
+          drawSheetName('military', 'SELECT A,B,C,D,E,F', militarySpendingResponseHandler);
+          drawSheetName('military', 'SELECT J,K,L,M,N,O', militaryPercentGDPResponseHandler);
+          drawSheetName('military', 'SELECT A,G', militaryGrowthAmountResponseHandler);
+          drawSheetName('military', 'SELECT A,H', militaryGrowthPercentResponseHandler);
+
+      } //drawAllSheets
+
+      function drawSheetName(sheetName, query, responseHandler) {
+          var queryString = encodeURIComponent(query);
+          var query = new google.visualization.Query(
+              'https://docs.google.com/spreadsheets/d/1hnnvMJyQ_5N9Wm9qjp9Q1hCmyilTUpsm/gviz/tq?sheet='
+              + sheetName + '&headers=1&tq=' + queryString);
+          query.send(responseHandler);
+      } //drawSheetName
+
+
+      function militarySpendingResponseHandler(response) {
+
+          var data = response.getDataTable();
+          data.sort({column: 5, desc:true});
+
+          var dashboard = new google.visualization.Dashboard(
+            document.getElementById('dashboard_military_div'));
+
+          var dropdown = new google.visualization.ControlWrapper({
+          'controlType': 'CategoryFilter',
+          'containerId': 'filter_military_div',
+          'options': {
+            'filterColumnIndex': 0}
+          });
+
+          var chart = new google.visualization.ChartWrapper({
+            'chartType': 'ColumnChart',
+            'containerId': 'military_spending_div',
+            'options': {
+              'width': 700,
+              'height': 500,
+              'legend': 'right',
+              'hAxis': {title: 'Country'},
+              'vAxis': {title: 'Military Spending (in million US$)'}
+            }
+            });
+
+          dashboard.bind(dropdown, chart);
+          dashboard.draw(data);
+
+      } // militarySpedingResponseHandler
+
+
+      function militaryPercentGDPResponseHandler(response) {
+          var data = response.getDataTable();
+          data.sort({column: 5, desc: true});
+
+          var dashboard = new google.visualization.Dashboard(
+            document.getElementById('dashboard_military_percent_gdp_div'));
+
+          var dropdown = new google.visualization.ControlWrapper({
+            'controlType': 'CategoryFilter',
+            'containerId': 'filter_military_gdp_div',
+            'options': {
+              'filterColumnIndex': 0}
+          });
+
+          var chart = new google.visualization.ChartWrapper({
+            'chartType': 'ColumnChart',
+            'containerId': 'military_gdp_div',
+            'options': {
+              'width': 700,
+              'height': 500,
+              'legend': 'right',
+              'hAxis': {title: 'Country'},
+              'vAxis': {title: 'Military Spending as % of GDP'}
+            }
+            });
+
+          dashboard.bind(dropdown, chart);
+
+          // Draw the dashboard.
+          dashboard.draw(data);
+
+      }// militaryPercentGDPResponseHandler
+
+      function militaryGrowthAmountResponseHandler(response) {
+          var data = response.getDataTable();
+          data.sort({column:1, desc: true});
+
+          var options = {
+              legend: 'none',
+              bars: 'horizontal',
+              annotations: {alwaysOutside: true},
+              title: 'Military Spending Growth in Fixed Amount (2015 vs. 2011)',
+              vAxis: {title: 'Country'},
+              hAxis: {title: 'Spending in million US$'}
+          };
+
+          var chart = new google.visualization.BarChart(document.getElementById('military_growth_amount_div'))
+          chart.draw(data, options)
+
+      } //militaryGrowthAmountResponseHandler
+
+      function militaryGrowthPercentResponseHandler(response) {
+          var data = response.getDataTable();
+          data.sort({column:1, desc: true});
+
+          var options = {
+              legend: 'none',
+              bars: 'horizontal',
+              annotations: {alwaysOutside: true},
+              title: 'Military Spending Growth in Percentage (2015 vs. 2011)',
+              vAxis: {title: 'Country'},
+              hAxis: {title: '% Growth in US$'}
+          };
+
+          var chart = new google.visualization.BarChart(document.getElementById('military_growth_percent_div'))
+          chart.draw(data, options)
+
+      } //militaryGrowthPercentResponseHandler
+  </script>
+</head>
+
+
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top header-inner-pages">
+    <div class="container d-flex align-items-center">
+
+      <h1 class="logo mr-auto"><a href="#header" class="scrollto">GWU|DataScience</a></h1>
+      <nav class="nav-menu d-none d-lg-block">
+        <ul>
+          <li class="active"><a href="#header">Home</a></li>
+          <li><a href="#footer">About</a></li>
+          <li><a href="#portfolio">Analyses</a></li>
+          <li class="drop-down"><a href="">Resources</a>
+            <ul>
+              <li><a href="https://www.w3schools.com/">w3schools</a></li>
+              <li><a href="https://bootstrapmade.com/">BootstrapMade</a></li>
+              <li><a href="https://developers.google.com/chart/interactive/docs/gallery">Google Charts</a></li>
+              <li class="drop-down"><a href="#">Data Sources</a>
+                <ul>
+                  <li><a href="https://www.worldbank.org/">World Bank</a></li>
+                  <li><a href="https://data.oecd.org/eduresource/education-spending.htm">OECD</a></li>
+                  <li><a href="https://apps.who.int/nha/database/Select/Indicators/en">WHO</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav><!-- .nav-menu -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li>Military</li>
+        </ol>
+        <h2>Military Spending Trend</h2>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Google Graphics Section ======= -->
+    <section id="portfolio-details" class="portfolio-details">
+      <div class="row">
+        <div class="col-md-6"> 
+          <h4>Military Spending Trend</h4>
+          <div id="dashboard_military_div">
+            <div id="military_spending_div" style="width: 700px; height: 500px;"></div>
+            <div id="filter_military_div"></div>
+          </div> <!-- End dashboard 1-->
+        </div>
+
+        <div class="col-md-6"> 
+          <h4>Military Spending as % of GDP</h4>
+          <div id="dashboard_military_percent_gdp_div">
+            <div id="military_gdp_div" style="width: 700px; height: 500px;"></div>
+            <div id="filter_military_gdp_div"></div>
+          </div> <!-- End dashboard 2 -->
+        </div> 
+      </div><!-- row 1 -->
+
+      <br>
+      <br>
+      <br>
+
+      <div class="row">
+        <div class="col-md-6"> 
+          <h4>Military Spending Growth (in Fixed Amount)</h4>
+          <div id="military_growth_amount_div" style="width: 700px; height: 500px;"></div>
+        </div>
+
+        <div class="col-md-6"> 
+          <h4>Military Spending Growth (%)</h4>
+          <div id="military_growth_percent_div" style="width: 700px; height: 500px;"></div>
+        
+        </div> 
+      </div><!-- row 2 -->
+
+    </section><!-- End Google Graphics Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 footer-links"></div>
+
+          <div class="col-lg-3 footer-info">
+            <h3>About Me</h3>
+            <p>Jenny Tsai, currently a MS candidate in the Data Science program at George Washington University.</p>
+          </div>
+
+          <div class="col-lg-3 footer-contact">
+            <h4>Contact</h4>
+            <p>
+              <strong>Email:</strong> jennytsai@gwu.edu<br>
+            </p>
+            <div class="social-links mt-3">
+              <a href="https://github.com/jennytsai32" class="github"><i class="bx bxl-github"></i></a>
+              <a href="https://www.linkedin.com/in/jennyhtsai/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+            </div>
+          </div>
+          
+          <div class="col-lg-3 footer-links"></div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Anyar</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade & Jenny Tsai</a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/jquery/jquery.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="assets/vendor/venobox/venobox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
